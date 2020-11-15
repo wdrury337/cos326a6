@@ -42,7 +42,7 @@ end
 (* Fill this in, then copy to queue.txt*)
 (***************************************)
 let abstract (q : int list * int list) : int list =
-  let (hd, tail) = q in hd @ (List.rev tail)
+  let (front, back) = q in front @ (List.rev back)
 
 let client1 emp ins rem =
   emp

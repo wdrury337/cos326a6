@@ -33,7 +33,7 @@ incorrect.
 
 Show your abstraction function from theory.ml here:
 let abstract (q : int list * int list) : int list = 
-
+   let (front, back) = q in front @ (List.rev back)
 
 ********************************************************************
 In the following questions, you may use the following lemmas about @ 
@@ -60,14 +60,16 @@ M1.emp is properly related to M2.emp?
 Theorem:  abstract (M1.emp) == M2.emp
 
 
-
 (3) Prove what you claimed you needed to prove in step (2):
 
-Proof by ...:
+Proof by equational reasoning:=
 
-
-
-
+abstract (M1.emp)                 (LHS)
+== abstract ([], [])              (Substitution)
+== [] @ (List.rev [])             (Eval)
+== [] @ []                        (Lemma 3)
+== []                             (Lemma 1)
+== M2.emp                         (Eval, reverse)
 QED!
 
 (4) Here is what you have to prove to show that M1.ins is properly 
@@ -94,15 +96,23 @@ Now assume the the "if" component of the theorem holds:
 Now using those assumptions, prove the "then" part of the theorem:
 
    abstract (M1.ins (i,q1))                 (LHS)
-==
-...
-== M2.ins (i,q2)                            (RHS)
+== abstract (M1.ins (i,f::b))               (Assumption 1)
+== abstract (f, i::b)                       (Eval)
+== f @ (List.rev i::b)                      (Eval)
+== f @ (List.rev b) @ [i]                   (Lemma 4)
+== abstract q1 @ [i]                        (Eval, reverse)
+== q2 @ [i]                                 (Assumption 2)
+== M2.ins (i,q2)                            (Eval, reverse == RHS)
 
 QED!
 
 (6) What do you have to prove to show that
 M1.rem is properly related to M2.rem?
 
-Theorem: ...
+Theorem: 
+for all q1:int list * int list,
+for all q2:int list, 
+if   abstract q1 == q2 
+then abstract (M1.rem (q1)) == M2.rem (q2)
 
 (You don't have to prove this theorem -- just state it.)
